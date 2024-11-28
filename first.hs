@@ -13,3 +13,6 @@ yRock30 t = (30 * t) - ((1/2) * 9.8 * t ** 2)
 
 vRock30 :: Double -> Double
 vRock30 t = (-9.8) * t + 30
+
+sinDeg :: Double -> Double
+sinDeg = sin . (* (pi / 180))
