@@ -7,5 +7,5 @@ diffGreaterThanOnePercent = greaterThan1Percent . expDiff
 takeTillClose x = takeWhile diffGreaterThanOnePercent (expList' x)
 howBig = length (takeTillClose 10.0)
 
--- for 10 it is (expList' 10) !! 200000000 = 22026.460050862457
+-- for 10 it is 107319505
 -- for 1 it 134 
