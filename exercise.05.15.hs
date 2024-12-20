@@ -1,5 +1,11 @@
+factorial :: Double -> Double
+factorial n = product [1..n]
+
+expApprox :: Double -> Double -> Double
+expApprox x n = sum [(x ** m) / factorial m | m <- [0..n]]
+
 expSeries :: Double -> [Double]
-expSeries x = repeat (exp x)
+expSeries x = [expApprox x m | m <- [0, 1..]]
 
 diff :: Double -> Double -> Double
 diff a b = abs(a - b)
@@ -18,3 +24,6 @@ takeTillClose x = takeWhile (greaterThan1PercentDiff x) (expSeries x)
 
 howBig :: Double -> Int
 howBig x = length (takeTillClose x)
+
+howBig 1 -- 4
+howBig 10 -- 29
