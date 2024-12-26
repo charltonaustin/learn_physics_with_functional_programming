@@ -10,4 +10,13 @@ trapIntegrate :: Int       -- # of trapezoids n
               -> R         -- lower limit a
               -> R         -- upper limit b
               -> R         -- result
-trapIntegrate n f a b = undefined
+trapIntegrate n f a b =
+  let delta = abs(a - b) / fromIntegral n
+      smaller = if a < b then a else b
+      larger = if b > a then b else a
+  in (f(smaller) * delta/2)
+     + sum [ delta * f(x)
+           | x <- [smaller + delta
+                  , smaller + (2 * delta)
+                  .. smaller + ((fromIntegral n) * delta)]]
+     + (f(larger) * delta/2)
