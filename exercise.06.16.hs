@@ -18,5 +18,5 @@ trapIntegrate n f a b =
      + sum [ delta * f(x)
            | x <- [smaller + delta
                   , smaller + (2 * delta)
-                  .. smaller + ((fromIntegral n) * delta)]]
+                  .. smaller + ((fromIntegral (n-1)) * delta)]]
      + (f(larger) * delta/2)
