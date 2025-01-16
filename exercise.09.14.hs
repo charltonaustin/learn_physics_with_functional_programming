@@ -9,7 +9,7 @@ stepSize = 1.0
 calculateV stepSize v = v + a(stepSize/2.0) * stepSize
 calculateS stepSize s v = s + calculateV(stepSize/2.0) v * stepSize
 
-
+takeAStep :: (R, R, R) -> (R, R, R)
 takeAStep  (t, s, v) = let nextT = t + stepSize
                            nextV = calculateV stepSize v
                            nextS = calculateS stepSize s v
