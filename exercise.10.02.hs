@@ -1,15 +1,12 @@
 import SimpleVec
 
-takeAStep :: R -> (R -> Vec) -> Vec -> Vec
-takeAStep dt f initial = initial ^+^ f (dt / 2) ^* dt
-
 vecIntegral :: R           -- stepSize dt
             -> (R -> Vec)  -- vector-valued function
             -> R           -- lower limit
             -> R           -- upper limit
             -> Vec         -- result
-vecIntegral dt f lower upper =
-  let n = truncate ((upper - lower) / dt)
-  in sumV (take n (iterate (takeAStep dt f) (f lower)))
+vecIntegral dt f a b =
+  sumV [ f t ^* dt | t <- [a + dt/2.0, a + 3 * dt/2.0 .. b - dt/2.0]]
+fnVec x = Vec (x**3) (exp(1)**(-x ** 2)) 1
 
--- this needs to be tested
+-- test vecIntegral 0.0001 fnVec 0 1
