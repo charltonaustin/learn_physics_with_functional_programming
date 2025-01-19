@@ -35,7 +35,7 @@ second :: (a, b, c) -> b
 second (_, y, _) = y
 
 lessThanZero :: (R, Vec, Vec) -> Bool
-lessThanZero vTP = (zComp (second vTP)) < 0
+lessThanZero vTP = toPos vTP < 0.0
 
 validTimePosVel :: Vec -> Vec -> [(R, Vec, Vec)]
 validTimePosVel initialPos initialVelocity =
@@ -43,7 +43,7 @@ validTimePosVel initialPos initialVelocity =
 
 
 toPos :: (R, Vec, Vec) -> R
-toPos = undefined
+toPos = zComp . second
 
 allPos :: Vec -> Vec -> [R]
 allPos initialPos initialVel = map toPos (validTimePosVel initialPos initialVel)
@@ -51,5 +51,3 @@ allPos initialPos initialVel = map toPos (validTimePosVel initialPos initialVel)
 maxHeight :: PosVec -> Velocity -> R
 maxHeight initialPos initialVelocity =
   maximum (allPos initialPos initialVelocity)
-
--- this needs to be tested
