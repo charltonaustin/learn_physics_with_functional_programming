@@ -12,6 +12,9 @@ infixl 7 ><
 
 type R = Double
 
+data Mass = Mass R
+            deriving (Eq, Show)
+
 data Vec = Vec { xComp :: R
                , yComp :: R
                , zComp :: R
@@ -21,7 +24,50 @@ instance Show Vec where
   show (Vec x y z) = "vec " ++ showDouble x ++ " "
                             ++ showDouble y ++ " "
                             ++ showDouble z
+type Time = R
+type PosVec = Vec
+type Velocity = Vec
+type Acceleration = Vec
 
+type VecDerivative = (R -> Vec) -> R -> Vec
+
+vecDerivative :: R -> VecDerivative
+vecDerivative dt v t = (v (t + dt/2) ^-^ v (t - dt/2) ^/ dt)
+
+velFromPos :: R                  -- dt
+           -> (Time -> PosVec)   -- position function
+           -> (Time -> Velocity) -- velocity function
+velFromPos = vecDerivative
+
+accFromVel :: R                      -- dt
+           -> (Time -> Velocity)     -- velocity function
+           -> (Time -> Acceleration) -- acceleration function
+accFromVel = vecDerivative
+
+positionCV :: PosVec -> Velocity -> Time -> PosVec
+positionCV r0 v0 t = v0 ^* t ^+^ r0
+
+velocityCA :: Velocity -> Acceleration -> Time -> Velocity
+velocityCA v0 a0 t = a0 ^* t ^+^ v0
+
+positionCA :: PosVec -> Velocity -> Acceleration -> Time -> PosVec
+positionCA r0 v0 a0 t = 0.5 *^ t**2 *^ a0 ^+^ v0 ^* t ^+^ r0
+
+aParallel :: Vec -> Vec -> Vec
+aParallel v a = let vHat = v ^/ magnitude v
+                in (vHat <.> a) *^ vHat
+
+aPerp :: Vec -> Vec -> Vec
+aPerp v a = a ^-^ aParallel v a
+
+speedRateOfChange :: Vec -> Vec -> R
+speedRateOfChange v a = (v <.> a) / magnitude v
+
+radiusOfCurvature :: Vec -> Vec -> R
+radiusOfCurvature v a = (v <.> v) / magnitude (aPerp v a)
+
+projectilePos :: PosVec -> Velocity -> Time -> PosVec
+projectilePos r0 v0 = positionCA r0 v0 (9.8 *^ negateV kHat)
 
 showDouble :: R -> String
 showDouble x
